@@ -22,27 +22,25 @@ const useStyles = () => makeStyles({
 
 
 class TestCenter extends React.Component{
-    
-    // eslint-disable-next-line no-useless-constructor
-    constructor(props){
-        super(props)
-        this.state = {
+        state = {
           rows: [],
         }
-    }
+ 
     componentDidMount(){
       const context = this
+      
       firebase.firestore().collection('admin-form').orderBy('city').onSnapshot((snapshot) => {//get().then((snapshot) => {
         let changes = snapshot.docChanges();
-        console.log('Changes: ', changes);
-        
-        changes.forEach(change => {
-          console.log('the change: ', change.doc.data());
-          
-          var { rows } = context.state
-            rows.push(change.doc.data());
-            // console.log('rows: ',rows)
-            context.setState({ rows })
+        changes.forEach((change) => {                
+          let newRows = {
+            city: change.doc.data().city,
+            location: change.doc.data().location,
+            address: change.doc.data().address,
+            phoneNumber: change.doc.data().phoneNumber,
+            id: change.doc.id
+          }
+          let rows = [...this.state.rows, newRows];
+            context.setState({rows: rows })
           
         })
       })
@@ -51,38 +49,26 @@ class TestCenter extends React.Component{
         const { title } = this.props
         const classes = useStyles();
         const {rows} = this.state
-        //creating dummy data for table
-          function createData(city, location, address, telephone) {
-            return { city, location, address, telephone };
-          }
-
         return(
             <CustomCard title={title}>
-        {/* <Typography variant="h4" align="center">
-          {title}
-        </Typography> */}
         <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
-          <TableRow>
+          <TableRow>          
             <TableCell>City</TableCell>
             <TableCell align="right">Location</TableCell>
             <TableCell align="right">Address</TableCell>
             <TableCell align="right">Telephone</TableCell>
-            {/* <TableCell align="right">Protein&nbsp;(g)</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
          
           {rows.map((row) => (
-            <TableRow key={row.city}>
-              <TableCell component="th" scope="row">
-                {row.city}
-              </TableCell>
+            <TableRow key={row.id}>
+              <TableCell component="th" scope="row">{row.city}</TableCell>              
               <TableCell align="right">{row.location}</TableCell>
               <TableCell align="right">{row.address}</TableCell>
-              <TableCell align="right">{row.phone}</TableCell>
-              {/* <TableCell align="right">{row.protein}</TableCell> */}
+              <TableCell align="right">{row.phoneNumber}</TableCell>
             </TableRow>
           ))}
         </TableBody>

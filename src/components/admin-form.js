@@ -30,7 +30,7 @@ class AdminForm extends React.Component {
             city: '',
             location: '',
             address: '',
-            phone: '',
+            phoneNumber: '',
             date: Date.now()
         };
         // console.log('Porps:', props);
@@ -48,39 +48,49 @@ class AdminForm extends React.Component {
         })
         console.log('Name value: ', name);
         
+        
     }
     handleSubmit = (event) => {
         // alert(`A name was submitted: ' + ${this.state.city} ${this.state.phone}`);
         // console.log('Form Data', this.state);
         event.preventDefault();
         //will change this later
-        const consent = true;
-        
+        // const consent = true;
+        // const formData = this.state
+        // console.log('Form data: ', formData);
         // TODO: add verifiation
-    if (!consent) {
-      alert("Please check the consent box")
-    } else {
-      // TODO: handle error and save to crashlytics 
-      firebase.auth().signInAnonymously().catch(function(error) {
-           // Handle Errors here.
-           var errorCode = error.code;
-           var errorMessage = error.message;
-        
-           if (errorCode === 'auth/operation-not-allowed') {
-             //alert('You must enable Anonymous auth in the Firebase Console.');
-           } else {
-            alert('Server down, please try again later!');
-             console.log(error);
-
-           }
-         }).then(function(crenditial) {
-            console.log(crenditial.user.uid);
-          var data = JSON.parse(this.state)
+        if(this.state.address === "" || this.state.city === "" || this.state.phoneNumber === ""){
+          alert('Please fill in form')
+        }else{
           firebase
           .firestore()
-          .collection("/admin-form").add(data)
-         });
-    } 
+          .collection("/admin-form").add(this.state)
+          alert('Thanks for sumbmitting')
+        }
+    // if (!consent) {
+    //   alert("Please check the consent box")
+    // } else {
+    //   // TODO: handle error and save to crashlytics 
+    //   firebase.auth().signInAnonymously().catch(function(error) {
+    //        // Handle Errors here.
+    //        var errorCode = error.code;
+    //        var errorMessage = error.message;
+        
+    //        if (errorCode === 'auth/operation-not-allowed') {
+    //          //alert('You must enable Anonymous auth in the Firebase Console.');
+    //        } else {
+    //         alert('Server down, please try again later!');
+    //          console.log(error);
+
+    //        }
+    //      }).then(function(crenditial) {
+    //         console.log(formData);
+    //       var data = formData;//JSON.parse(formData)
+    //       firebase
+    //       .firestore()
+    //       .collection("/admin-form").add(data)
+    //      });
+    // } 
   }
         
 
@@ -142,8 +152,8 @@ render(){
             id="standard-full-width"
             type="number"
             label="Telephone"
-            name="phone"
-            value={this.state.phone}
+            name="phoneNumber"
+            value={this.state.phoneNumber}
             onChange={this.handleChange} 
             style={{ margin: 8 }}
             placeholder="Enter facility phone number"
