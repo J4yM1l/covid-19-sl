@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import CustomCard from "./custom-card"
 import Button from '@material-ui/core/Button';
+import { Link, navigate } from "gatsby"
 // import Input from "@material-ui/core/Input";
 // import firebase from "gatsby-plugin-firebase"
 import firebase from "../helper/firebase"
@@ -62,10 +63,12 @@ class AdminForm extends React.Component {
         if(this.state.address === "" || this.state.city === "" || this.state.phoneNumber === ""){
           alert('Please fill in form')
         }else{
-          firebase
-          .firestore()
-          .collection("/admin-form").add(this.state)
+          // firebase
+          // .firestore()
+          // .collection("/admin-form").add(this.state)
           alert('Thanks for sumbmitting')
+          navigate('/admin/test-centers');
+
         }
     // if (!consent) {
     //   alert("Please check the consent box")
@@ -111,7 +114,7 @@ render(){
             label="City"
             style={{ margin: 8 }}
             placeholder="Enter City"
-          //   helperText="Full width!"
+            helperText="Full width!"
             fullWidth
             margin="normal"
             InputLabelProps={{

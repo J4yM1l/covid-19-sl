@@ -10,7 +10,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 // import firebase from "gatsby-plugin-firebase"
-import firebase from '../helper/firebase'
+import firebase from '../helper/firebase';
 
 
 
@@ -23,7 +23,7 @@ const useStyles = () => makeStyles({
 
 class TestCenter extends React.Component{
         state = {
-          rows: [],
+          rows: []
         }
  
     componentDidMount(){

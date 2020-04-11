@@ -8,35 +8,35 @@ export const getUser = () =>
 export const setUser = user =>
   isBrowser() && window.localStorage.setItem("user", JSON.stringify(user))
 
-//   export const isLoggedIn = () => {
-//   const user = getUser()
-//   return !!user.email
-// }
-
-// export const logout = (firebase) => {
-//   return new Promise(resolve => {
-//     firebase.auth().signOut().then(function() {
-//       setUser({});
-//       resolve();
-//     });
-//   })
-// }
-
-export const handleLogin = ({ username, password }) => {
-  if (username === `john` && password === `pass`) {
-    return setUser({
-      username: `john`,
-      name: `Johnny`,
-      email: `johnny@example.org`,
-    })
-  }
-  return false
-}
-export const isLoggedIn = () => {
+  export const isLoggedIn = () => {
   const user = getUser()
-  return !!user.username
+  return !!user.email
 }
-export const logout = callback => {
-  setUser({})
-  callback()
+
+export const logout = (firebase) => {
+  return new Promise(resolve => {
+    firebase.auth().signOut().then(function() {
+      setUser({});
+      resolve();
+    });
+  })
 }
+
+// export const handleLogin = ({ username, password }) => {
+//   if (username === `john` && password === `pass`) {
+//     return setUser({
+//       username: `john`,
+//       name: `Johnny`,
+//       email: `johnny@example.org`,
+//     })
+//   }
+//   return false
+// }
+// export const isLoggedIn = () => {
+//   const user = getUser()
+//   return !!user.username
+// }
+// export const logout = callback => {
+//   setUser({})
+//   callback()
+// }

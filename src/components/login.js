@@ -1,57 +1,47 @@
 import React from "react"
-import { navigate } from "gatsby"
-import { handleLogin, isLoggedIn } from "../utils/auth"
-import NavBar from '../components/nav-bar'
+import { navigate } from '@reach/router';
+import { useState} from "react"
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import { setUser, isLoggedIn } from "../utils/auth"
+// import useFirebase  from "gatsby-plugin-firebase";
+import firebase from "../helper/firebase"
 
-class Login extends React.Component {
-  state = {
-    username: ``,
-    password: ``,
+const Login = () => {
+//   const [firebase, setFirebase] = useState();
+
+//   useFirebase(firebase => {
+//     setFirebase(firebase);
+//   }, [])
+
+  if (isLoggedIn()) {
+    navigate(`/admin/admin-form`)
   }
 
-  handleUpdate = event => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    })
+  function getUiConfig(auth) {
+    return {
+      signInFlow: 'popup',
+      signInOptions: [
+        auth.GoogleAuthProvider.PROVIDER_ID,
+        auth.EmailAuthProvider.PROVIDER_ID
+      ],
+      // signInSuccessUrl: '/app/profile',
+      callbacks: {
+        signInSuccessWithAuthResult: (result) => {
+          setUser(result.user);
+          navigate('/admin/admin-form');
+        }
+      }
+    };
   }
 
-  handleSubmit = event => {
-    event.preventDefault()
-    handleLogin(this.state)
-  }
+  return (
+      <div>
+        {/* <p>Please sign-in to access to the private route:</p> */}
+        {firebase && <StyledFirebaseAuth uiConfig={getUiConfig(firebase.auth)} firebaseAuth={firebase.auth()}/>}
+      </div>
+      
+  );
 
-  render() {
-    if (isLoggedIn()) {
-      navigate(`/admin/profile`)
-    }
-
-    return (
-      <>
-        <h1>Log in</h1>
-        <form
-          method="post"
-          onSubmit={event => {
-            this.handleSubmit(event)
-            navigate(`/admin/profile`)
-          }}
-        >
-          <label>
-            Username
-            <input type="text" name="username" onChange={this.handleUpdate} />
-          </label>
-          <label>
-            Password
-            <input
-              type="password"
-              name="password"
-              onChange={this.handleUpdate}
-            />
-          </label>
-          <input type="submit" value="Log In" />
-        </form>
-      </>
-    )
-  }
 }
 
 export default Login
