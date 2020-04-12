@@ -33,8 +33,8 @@ class TestCenter extends React.Component{
         let changes = snapshot.docChanges();
 
         changes.forEach(change => {
-
           let newRows = {
+            hospitalName: change.doc.data().hospitalName,
             city: change.doc.data().city,
             location: change.doc.data().location,
             address: change.doc.data().address,
@@ -50,6 +50,7 @@ class TestCenter extends React.Component{
     render (){
         const { title } = this.props
         const classes = useStyles();
+
         const {rows} = this.state
 
         return(
