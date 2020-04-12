@@ -1,5 +1,5 @@
 import React from 'react'
-import { makeStyles } from "@material-ui/core/styles"
+import { withStyles, makeStyles } from "@material-ui/core/styles"
 import CustomCard from "../components/custom-card"
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -10,51 +10,76 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 // import firebase from "gatsby-plugin-firebase"
 import firebase from "../helper/firebase";
+import LinearProgress from '@material-ui/core/LinearProgress';
 
-const useStyles = () => makeStyles({
+// const useTstyles = () => makeStyles({
+//     table: {
+//       minWidth: 650,
+//     },
+//   });
+
+  const useStyles = theme => ({
+    root: {
+      width: '100%',
+      '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
+    },
     table: {
       minWidth: 650,
     },
-  });
-
-
-class TestCenter extends React.Component{
-    
+  });   
+  let dataExist = false;
+class TestCenter extends React.Component{  
     // eslint-disable-next-line no-useless-constructor
     constructor(props){
         super(props)
         this.state = {
-          rows: [],
+          rows: [],          
         }
+        
     }
+
     componentDidMount(){
       const context = this
-      firebase.firestore().collection('admin-form').orderBy('city').onSnapshot(snapshot =>{
-        let changes = snapshot.docChanges();
-
-        changes.forEach(change => {
-
+      firebase.firestore().collection('admin-form').orderBy('city').get().then(snapshot => {//onSnapshot(snapshot =>{
+        // let changes = snapshot.docs;//snapshot.docChanges();
+        console.log('Snapshot: ', snapshot.docs);
+        
+        snapshot.forEach(change => {
+          if(change.exists) {  
+            console.log('Change: ', change.data());          
+            dataExist = true;
           let newRows = {
-            city: change.doc.data().city,
-            location: change.doc.data().location,
-            address: change.doc.data().address,
-            phoneNumber: change.doc.data().phoneNumber,
-            id: change.doc.id
+            hospitalName: change.data().hospitalName,
+            city: change.data().city,
+            location: change.data().location,
+            address: change.data().address,
+            phoneNumber: change.data().phoneNumber,
+            id: change.id
           }
           let rows = [...this.state.rows, newRows];
             context.setState({rows: rows })
-          
+          } 
         })
       })
     }
-    render (){
+
+
+    render (){        
         const { title } = this.props
-        const classes = useStyles();
+        const {classes} = this.props;
+
         const {rows} = this.state
 
         return(
-            <CustomCard title={title}>
+            <CustomCard title={title}>             
         <TableContainer component={Paper}>
+        {rows.length <= 0 ? (
+          <div className={classes.root}>
+          <LinearProgress color="primary" />
+          </div>
+          ) : null}
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
@@ -65,8 +90,8 @@ class TestCenter extends React.Component{
             <TableCell align="right">Telephone</TableCell>           
           </TableRow>
         </TableHead>
-        <TableBody>
-         
+        
+        <TableBody>       
           {rows.map((row) => (
             <TableRow key={row.id}>
               <TableCell component="th" scope="row">
@@ -77,13 +102,14 @@ class TestCenter extends React.Component{
               <TableCell align="right">{row.address}</TableCell>
               <TableCell align="right">{row.phoneNumber}</TableCell>              
             </TableRow>
-          ))}
+          ))}          
         </TableBody>
-      </Table>
-    </TableContainer>
+      </Table>                          
+    </TableContainer>   
 </CustomCard>
 )
     }
+
 }
 
-export default TestCenter
+export default withStyles(useStyles) (TestCenter)

@@ -4,6 +4,7 @@ import CustomCard from "./custom-card"
 import Button from '@material-ui/core/Button';
 // import firebase from "gatsby-plugin-firebase"
 import firebase from "../helper/firebase";
+// import { navigate } from '@reach/router';
 
   
 class AdminForm extends React.Component {
@@ -22,6 +23,7 @@ class AdminForm extends React.Component {
             addressError: '',
             phoneError: '',
             isPhoneNumberValid: false,
+            show: true,
             date: Date.now()
         };
 
@@ -134,7 +136,7 @@ class AdminForm extends React.Component {
           firebase
           .firestore()
           .collection("/admin-form").add(formData)
-          alert(`Form Submitted`);
+          // alert(`Form Submitted`);
           this.setState({
             hospitalName: '',
             city: '',
@@ -142,6 +144,7 @@ class AdminForm extends React.Component {
             address: '',
             phoneNumber: ''
           })
+          // setTimeout(() => navigate('/'), 2000);
       
     } 
   }
@@ -149,11 +152,15 @@ class AdminForm extends React.Component {
 
 
 render(){
+  let test;
+  if(this.state.show){
+    test = <Message/>
+  }else{
+    test = <h3>Form Submitted!</h3>
+  }
 
     return (
-        <CustomCard title={"Test Center Form"}>
-      <div >
-        <div>
+        <CustomCard title={test}>
             <form onSubmit={this.handleSubmit}>
             <TextField
             id="standard-full-width"
@@ -245,16 +252,26 @@ render(){
            <div>
            <span style={{color: "red"}}>{this.state.phoneError}</span>
            </div>
-         <Button type="submit" size="large" variant="contained" color="primary" disableElevation>
+         <Button onClick={() => {this.setState({show: false})}} type="submit" size="large" variant="contained" color="primary" disableElevation>
         Save
       </Button>
             </form>
-          
-          </div>
-          </div>
       </CustomCard>
     );
 }
+  
+}
+class Message extends React.Component{
+  componentWillUnmount(){
+    // alert('Component Unmounting')
+    console.log('Component is Unmounting');
+    
+  }
+  render(){
+    return(
+      <h3>Welcome!</h3>
+    )
+  }
   
 }
 export default AdminForm
