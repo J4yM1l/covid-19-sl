@@ -1,5 +1,5 @@
 import React from 'react'
-import { withStyles, makeStyles } from "@material-ui/core/styles"
+import { withStyles } from "@material-ui/core/styles"
 import CustomCard from "../components/custom-card"
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -37,13 +37,9 @@ class TestCenter extends React.Component{
 
     componentDidMount(){
       const context = this
-      firebase.firestore().collection('admin-form').orderBy('city').get().then(snapshot => {//onSnapshot(snapshot =>{
-        // let changes = snapshot.docs;//snapshot.docChanges();
-        console.log('Snapshot: ', snapshot.docs);
-        
+      firebase.firestore().collection('admin-form').orderBy('city').get().then(snapshot => {//onSnapshot(snapshot =>{        
         snapshot.forEach(change => {
-          if(change.exists) {  
-            console.log('Change: ', change.data());                
+          if(change.exists) {                             
           let newRows = {
             hospitalName: change.data().hospitalName,
             city: change.data().city,
