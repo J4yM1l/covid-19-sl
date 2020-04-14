@@ -12,11 +12,6 @@ import Paper from '@material-ui/core/Paper';
 import firebase from "../helper/firebase";
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-// const useTstyles = () => makeStyles({
-//     table: {
-//       minWidth: 650,
-//     },
-//   });
 
   const useStyles = theme => ({
     root: {
@@ -29,7 +24,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
       minWidth: 650,
     },
   });   
-  let dataExist = false;
+  
 class TestCenter extends React.Component{  
     // eslint-disable-next-line no-useless-constructor
     constructor(props){
@@ -48,8 +43,7 @@ class TestCenter extends React.Component{
         
         snapshot.forEach(change => {
           if(change.exists) {  
-            console.log('Change: ', change.data());          
-            dataExist = true;
+            console.log('Change: ', change.data());                
           let newRows = {
             hospitalName: change.data().hospitalName,
             city: change.data().city,
@@ -57,6 +51,7 @@ class TestCenter extends React.Component{
             address: change.data().address,
             phoneNumber: change.data().phoneNumber,
             id: change.id
+      
           }
           let rows = [...this.state.rows, newRows];
             context.setState({rows: rows })
