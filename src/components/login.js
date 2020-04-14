@@ -36,7 +36,7 @@ const Login = () => {
 
   return (
       <div>
-        {/* <p>Please sign-in to access to the private route:</p> */}
+        <p>Please sign-in to access to the private route:</p>
         {firebase && <StyledFirebaseAuth uiConfig={getUiConfig(firebase.auth)} firebaseAuth={firebase.auth()}/>}
       </div>
       

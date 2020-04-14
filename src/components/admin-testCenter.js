@@ -10,6 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 // import firebase from "gatsby-plugin-firebase"
 import firebase from '../helper/firebase';
+import { colors } from '@material-ui/core';
 
 const useStyles = () => makeStyles({
     table: {
@@ -19,9 +20,33 @@ const useStyles = () => makeStyles({
 
 
 class TestCenter extends React.Component{
-        state = {
-          rows: []
-        }
+            state = {
+                rows: []
+            }
+        
+
+        deleteRow = (id) =>{
+
+            // console.log('Id to be deleted.... ', id);
+            firebase.firestore().collection('admin-form').doc(id).delete();
+            // console.log('Id deleted ', id);
+    
+          }
+
+          handleUpdate = () => {
+            console.log('Click event ');
+            firebase.firestore().collection('admin-form').onSnapshot( snapshot => {
+                let snaps = snapshot.docChanges();
+                // console.log('Snaps: ', snaps);
+                snaps.forEach( row => {
+                    console.log('Data ',row.doc.id);
+                    if(row.type === 'remove'){
+                        
+                    }
+                    
+                })
+            })
+          }
  
     componentDidMount(){
       const context = this
@@ -42,15 +67,17 @@ class TestCenter extends React.Component{
           
         })
       })
+     
     }
-    render (){
-        const { title } = this.props
-        const classes = useStyles();
 
+    render (){
+        // const { title } = this.props
+        const classes = useStyles();
+        // const {handleOnclick} = this.handleOnclick;        
         const {rows} = this.state
-        return(
-            <CustomCard title={title}>
-        <TableContainer component={Paper}>
+        return(                        
+            <CustomCard title={'Admin Test Center'}>             
+        <TableContainer component={Paper}>       
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>          
@@ -62,20 +89,24 @@ class TestCenter extends React.Component{
           </TableRow>
         </TableHead>
         <TableBody>
-         
+
           {rows.map((row) => (
             <TableRow key={row.id}>
               <TableCell component="th" scope="row">
                 {row.city}
-              </TableCell>
+              </TableCell>              
               <TableCell align="right">{row.hospitalName}</TableCell>
               <TableCell align="right">{row.location}</TableCell>
               <TableCell align="right">{row.address}</TableCell>
-              <TableCell align="right">{row.phoneNumber}</TableCell>              
-            </TableRow>
-          ))}
+              <TableCell align="right">{row.phoneNumber}</TableCell> 
+              <TableCell align="right"><button style={{background: 'red'}} onClick={ () => {this.deleteRow(row.id)} } type="submit" size="large" ><span>x</span></button></TableCell> 
+              {/* <div>
+                  <button onClick={this.handleOnclick} type="submit" size="large" ><span>x</span></button>
+              </div>               */}
+            </TableRow>            
+          ))}                   
         </TableBody>
-      </Table>
+      </Table>      
     </TableContainer>
 </CustomCard>
 )

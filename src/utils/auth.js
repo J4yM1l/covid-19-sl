@@ -5,8 +5,10 @@ export const getUser = () =>
     ? JSON.parse(window.localStorage.getItem("user"))
     : {}
 
-export const setUser = user =>
+export const setUser = user => {
   isBrowser() && window.localStorage.setItem("user", JSON.stringify(user))
+}
+  
 
   export const isLoggedIn = () => {
   const user = getUser()

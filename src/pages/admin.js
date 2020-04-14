@@ -9,7 +9,7 @@ import Layout from "../components/layout"
 import { Router } from "@reach/router"
 import PrivateRoute from '../components/privateRoute'
 import NavBar from "../components/nav-bar"
-import TestCenters from '../components/test-centers'
+import AdminTestCenters from '../components/admin-testCenter'
 
 const Admin  = () => {
   const matches = useMediaQuery("(min-width:600px)")
@@ -30,7 +30,7 @@ const Admin  = () => {
         {/* <Profile path="/admin/profile" /> */}
         <PrivateRoute path="/admin/admin-form" component={AdminForm} />
         <PrivateRoute path="/admin/profile" component={Profile} />
-        <PrivateRoute path="/admin/test-centers" component={TestCenters}/>
+        <PrivateRoute path="/admin/admin-testCenter" component={AdminTestCenters}/>
         <Login path="/admin/login" />
       </Router>
 
@@ -42,6 +42,9 @@ const Admin  = () => {
         >  
           <Box flexGrow={1} p={1}>          
           <AdminForm
+              title={"Add/Update Test Center"}
+            />
+            {/* <Summary
               title={"Add/Update Test Center"}
             />
           </Box>

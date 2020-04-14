@@ -1,110 +1,177 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import CustomCard from "./custom-card"
 import Button from '@material-ui/core/Button';
-import { Link, navigate } from "gatsby"
-// import Input from "@material-ui/core/Input";
 // import firebase from "gatsby-plugin-firebase"
-import firebase from "../helper/firebase"
-const useStyles = makeStyles((theme) => ({
-    root: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      width: '25ch',
-    },
-    button: {
-        margin: theme.spacing(1),
-      },
-  }));
-
+import firebase from "../helper/firebase";
+import { navigate } from "gatsby"
   
 class AdminForm extends React.Component {
 
     constructor(props){
         super(props);
         this.state = {
+            hospitalName: '',
             city: '',
             location: '',
             address: '',
             phoneNumber: '',
+            cityError: '',
+            hospitalNameError: '',
+            locationError: '',
+            addressError: '',
+            phoneError: '',
+            isPhoneNumberValid: false,
             date: Date.now()
         };
-        // console.log('Porps:', props);
 
-        // this.handleChange = this.handleChange.bind(this);
-        // this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+     isFormInputvalid = () => {
+       let hospitalNameError = '';
+       let cityError = '';
+       let locationError = '';
+       let addressError = '';
+       let phoneError = '';
+       let isValid = true;
+      //checking form for empty/invalid field format before submission
+      if(this.state.hospitalName === ""){
+        hospitalNameError = 'enter hospital name';
+        this.setState({hospitalNameError: hospitalNameError});
+        isValid = false;
+      }
+      if(this.state.city === ""){
+        cityError = 'enter a city name';
+        this.setState({cityError: cityError});
+        isValid = false;
+      }if (this.state.location === "") {
+        locationError = 'enter a location';
+        this.setState({locationError: locationError});
+        
+        isValid = false;
+      }if(this.state.address === ""){
+        addressError = 'enter an address';
+        this.setState({addressError: addressError});
+        
+        isValid = false;
+      }if(this.state.isPhoneNumberValid === false){
+      phoneError = 'enter a valid phone number';
+      this.setState({phoneError: phoneError});
+      isValid = false;
+      }
+        return isValid;
+  
+      
     }
     
     handleChange = (event) => {
-        const target = event.target
-        const value = target.value
-        const name = target.name
+      const name = event.target.name;
         this.setState({
-            [name]: value,
-        })
-        console.log('Name value: ', name);
-        
-        
+          [event.target.name]: event.target.value,         
+          
+      })
+
+      if(name === 'hospitalName'){
+        this.setState({
+          hospitalNameError: ''
+        }); 
+      } 
+
+      if(name === 'city'){
+        this.setState({
+          cityError: ''
+        }); 
+      } 
+
+      if(name === 'location'){
+        this.setState({
+          locationError: ''
+        })  
     }
-    handleSubmit = (event) => {
-        // alert(`A name was submitted: ' + ${this.state.city} ${this.state.phone}`);
-        // console.log('Form Data', this.state);
-        event.preventDefault();
-        //will change this later
-        // const consent = true;
-        // const formData = this.state
-        // console.log('Form data: ', formData);
-        // TODO: add verifiation
-        if(this.state.address === "" || this.state.city === "" || this.state.phoneNumber === ""){
-          alert('Please fill in form')
-        }else{
-          // firebase
-          // .firestore()
-          // .collection("/admin-form").add(this.state)
-          alert('Thanks for sumbmitting')
-          navigate('/admin/test-centers');
 
-        }
-    // if (!consent) {
-    //   alert("Please check the consent box")
-    // } else {
-    //   // TODO: handle error and save to crashlytics 
-    //   firebase.auth().signInAnonymously().catch(function(error) {
-    //        // Handle Errors here.
-    //        var errorCode = error.code;
-    //        var errorMessage = error.message;
+    if(name === 'address'){
+      this.setState({
+        addressError: ''       
+      })
+    }
+
+    if(name === 'phoneNumber'){
+      let phoneFormat = /^\+?([0-9]{3})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
+      if(event.target.value.match(phoneFormat)){
+       
+        this.setState({
+          phoneError: '',
+          isPhoneNumberValid: true        
+        })
+      }else{
+        this.setState({
+          phoneError: 'incorrect number format',
+          isPhoneNumberValid: false        
+        })
         
-    //        if (errorCode === 'auth/operation-not-allowed') {
-    //          //alert('You must enable Anonymous auth in the Firebase Console.');
-    //        } else {
-    //         alert('Server down, please try again later!');
-    //          console.log(error);
 
-    //        }
-    //      }).then(function(crenditial) {
-    //         console.log(formData);
-    //       var data = formData;//JSON.parse(formData)
-    //       firebase
-    //       .firestore()
-    //       .collection("/admin-form").add(data)
-    //      });
-    // } 
+      }
+      
+    }
+  }
+    handleSubmit = (event) => {
+        event.preventDefault();   
+        const isValid = this.isFormInputvalid()
+        const formData = {
+          hospitalName: this.state.hospitalName,
+          city: this.state.city,
+          location: this.state.location,
+          address: this.state.address,
+          phoneNumber: this.state.phoneNumber
+        }
+
+       
+    if (!isValid) {
+      alert(`Please check your form inputs`);
+    } else {
+          firebase
+          .firestore()
+          .collection("/admin-form").add(formData)
+          alert(`Form Submitted`);
+          this.setState({
+            hospitalName: '',
+            city: '',
+            location: '',
+            address: '',
+            phoneNumber: ''
+          })
+          navigate('/admin/admin-testCenter');
+      
+    } 
   }
         
 
 
 render(){
-  // const classes = useStyles(); 
+
     return (
         <CustomCard title={"Test Center Form"}>
       <div >
         <div>
             <form onSubmit={this.handleSubmit}>
+            <TextField
+            id="standard-full-width"
+            name="hospitalName" 
+            value={this.state.hospitalName}
+            type="text"
+            onChange={this.handleChange} 
+            label="Hospital"
+            style={{ margin: 8 }}
+            placeholder="Enter name of hospital"
+            fullWidth
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+           <div>
+           <span style={{color: "red"}}>{this.state.hospitalNameError}</span>
+           </div>
             <TextField
             id="standard-full-width"
             name="city" 
@@ -114,19 +181,21 @@ render(){
             label="City"
             style={{ margin: 8 }}
             placeholder="Enter City"
-            helperText="Full width!"
             fullWidth
             margin="normal"
             InputLabelProps={{
               shrink: true,
             }}
           />
+           <div>
+           <span style={{color: "red"}}>{this.state.cityError}</span>
+           </div>
            <TextField
             id="standard-full-width"
             label="Location"
             name="location"
             value={this.state.location}
-            type="text"
+            type="text"            
             onChange={this.handleChange} 
             style={{ margin: 8 }}
             placeholder="Enter regional location"
@@ -136,12 +205,15 @@ render(){
               shrink: true,
             }}
           />
+           <div>
+           <span style={{color: "red"}}>{this.state.locationError}</span>
+           </div>
            <TextField
             id="standard-full-width"
             label="Address"
             name="address"
             value={this.state.address}
-            type="text"
+            type="text"          
             onChange={this.handleChange} 
             style={{ margin: 8 }}
             placeholder="Enter facility address"
@@ -151,11 +223,14 @@ render(){
               shrink: true,
             }}
           />
+          <div>
+            <span style={{color: "red"}}>{this.state.addressError}</span>
+          </div>
            <TextField
             id="standard-full-width"
             type="number"
             label="Telephone"
-            name="phoneNumber"
+            name="phoneNumber"            
             value={this.state.phoneNumber}
             onChange={this.handleChange} 
             style={{ margin: 8 }}
@@ -166,6 +241,9 @@ render(){
               shrink: true,
             }}
           />
+           <div>
+           <span style={{color: "red"}}>{this.state.phoneError}</span>
+           </div>
          <Button type="submit" size="large" variant="contained" color="primary" disableElevation>
         Save
       </Button>
