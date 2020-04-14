@@ -10,7 +10,6 @@ import { Router } from "@reach/router"
 import PrivateRoute from '../components/privateRoute'
 import NavBar from "../components/nav-bar"
 import AdminTestCenters from '../components/admin-testCenter'
-
 const Admin  = () => {
   const matches = useMediaQuery("(min-width:600px)")
   return (

@@ -46,7 +46,6 @@ class TestCenter extends React.Component{
     render (){
         const { title } = this.props
         const classes = useStyles();
-
         const {rows} = this.state
         return(
             <CustomCard title={title}>

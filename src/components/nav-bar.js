@@ -69,8 +69,7 @@ export default () => {
     )
   } else {
     const { displayName, email } = getUser()
-    details = (
-// ---------------------------------------------------------- 
+    details = ( 
 <div>
     <Button aria-controls="fade-menu" aria-haspopup="true">
          Logged in as {displayName} ({email})!
@@ -92,52 +91,4 @@ export default () => {
           {details}
         </div>
 
-  // let greetingMessage = ""
-  // if (isLoggedIn()) {
-  //   greetingMessage = `Hello ${getUser().name}`
-  // } else {
-  //   greetingMessage = "You are not logged in"
-  // }
-
-  // return (
-  //   <div
-  //     style={{
-  //       display: "flex",
-  //       flex: "1",
-  //       justifyContent: "space-between",
-  //       borderBottom: "1px solid #d1c1e0",
-  //     }}
-  //   >
-  //     <span>{greetingMessage}</span>
-  //     <nav>
-  //       <Link to="/">Home</Link>
-  //       {` `}
-  //       <Link to="/admin/profile">Profile</Link>
-  //       {` `}
-  //       <Link to="/admin/admin-form">Add Centers</Link>
-  //       {` `}
-  //       <Link to="/admin/test-centers">Test center</Link>
-  //       {` `}
-  //       {isLoggedIn() ? (
-  //         <a
-  //           href="/"
-  //           onClick={event => {
-  //             event.preventDefault()
-  //             logout(() => navigate(`/admin/login`))
-  //           }}
-  //         >
-  //           Logout
-  //         </a>
-  //       ) : (<a
-  //           href="/"
-  //           onClick={event => {
-  //             event.preventDefault()
-  //             logout(() => navigate(`/admin/login`))
-  //           }}
-  //         >
-  //           Login
-  //         </a>)}
-  //     </nav>
-  //   </div>
-  // )
 }
