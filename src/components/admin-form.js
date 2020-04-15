@@ -4,7 +4,7 @@ import CustomCard from "./custom-card"
 import Button from '@material-ui/core/Button';
 // import firebase from "gatsby-plugin-firebase"
 import firebase from "../helper/firebase";
-// import { navigate } from '@reach/router';
+import { navigate } from '@reach/router';
 
   
 class AdminForm extends React.Component {
@@ -105,7 +105,6 @@ class AdminForm extends React.Component {
           phoneError: '',
           isPhoneNumberValid: true        
         })
-        
       }else{
         this.setState({
           phoneError: 'incorrect number format',
@@ -118,8 +117,7 @@ class AdminForm extends React.Component {
     }
   }
     handleSubmit = (event) => {
-        event.preventDefault();
-        
+        event.preventDefault();   
         const isValid = this.isFormInputvalid()
         const formData = {
           hospitalName: this.state.hospitalName,
@@ -144,7 +142,7 @@ class AdminForm extends React.Component {
             address: '',
             phoneNumber: ''
           })
-          // setTimeout(() => navigate('/'), 2000);
+          setTimeout(() => navigate('/admin/admin-testCenter'), 2000);
       
     } 
   }
@@ -252,7 +250,11 @@ render(){
            <div>
            <span style={{color: "red"}}>{this.state.phoneError}</span>
            </div>
-         <Button onClick={() => {this.setState({show: false})}} type="submit" size="large" variant="contained" color="primary" disableElevation>
+         <Button onClick={() => {
+           if(this.isFormInputvalid()){
+            this.setState({show: false})}
+           }           
+           } type="submit" size="large" variant="contained" color="primary" disableElevation>
         Save
       </Button>
             </form>

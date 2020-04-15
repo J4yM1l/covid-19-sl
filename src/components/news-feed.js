@@ -10,7 +10,7 @@ import {
   TableBody,
 } from "@material-ui/core"
 import CustomCard from "../components/custom-card"
-
+// import firebase  from "gatsby-plugin-firebase";
 import firebase from "../helper/firebase"
 
 const useStyles = theme => ({

@@ -8,7 +8,7 @@ import Summary from "../components/summary"
 import NewsFeed from "../components/news-feed"
 import TestCenters from "../components/test-centers"
 import SEO from "../components/seo"
-
+// import firebase  from "gatsby-plugin-firebase";
 import firebase from "../helper/firebase"
 
 const firebaseConnection = key => {

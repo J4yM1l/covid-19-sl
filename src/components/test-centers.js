@@ -60,9 +60,7 @@ class TestCenter extends React.Component{
     render (){        
         const { title } = this.props
         const {classes} = this.props;
-
         const {rows} = this.state
-
         return(
             <CustomCard title={title}>             
         <TableContainer component={Paper}>
@@ -73,12 +71,12 @@ class TestCenter extends React.Component{
           ) : null}
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
-          <TableRow>
+          <TableRow>          
             <TableCell>City</TableCell>
             <TableCell align="right">Hospital</TableCell>
             <TableCell align="right">Location</TableCell>
             <TableCell align="right">Address</TableCell>
-            <TableCell align="right">Telephone</TableCell>           
+            <TableCell align="right">Telephone</TableCell>
           </TableRow>
         </TableHead>
         
